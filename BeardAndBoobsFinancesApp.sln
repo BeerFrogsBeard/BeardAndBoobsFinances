@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeardAndBoobsFinances", "Be
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{EBC7A0BA-BF27-4BD6-B178-409972C135AA}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BeardAndBoobsData", "BeardAndBoobsData\BeardAndBoobsData.sqlproj", "{EDA8EF32-6F8F-4CE5-A6FF-347E31C0CC11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,12 @@ Global
 		{EBC7A0BA-BF27-4BD6-B178-409972C135AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBC7A0BA-BF27-4BD6-B178-409972C135AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBC7A0BA-BF27-4BD6-B178-409972C135AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDA8EF32-6F8F-4CE5-A6FF-347E31C0CC11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA8EF32-6F8F-4CE5-A6FF-347E31C0CC11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA8EF32-6F8F-4CE5-A6FF-347E31C0CC11}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{EDA8EF32-6F8F-4CE5-A6FF-347E31C0CC11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA8EF32-6F8F-4CE5-A6FF-347E31C0CC11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDA8EF32-6F8F-4CE5-A6FF-347E31C0CC11}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

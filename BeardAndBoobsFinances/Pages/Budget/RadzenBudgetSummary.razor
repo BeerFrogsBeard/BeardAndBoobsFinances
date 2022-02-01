@@ -38,9 +38,9 @@ else
 @code {
 
     private IEnumerable<BudgetSummaryModel> budget;
-    private IList<BudgetSummaryModel> selectedBudgetItem;
     private IEnumerable<BudgetColumnsModelAdvanced> columns;
-
+    private IList<BudgetSummaryModel> selectedBudgetItem;
+    
     protected override async Task OnInitializedAsync()
     {
         budget = await _db.GetBudgetSummary();

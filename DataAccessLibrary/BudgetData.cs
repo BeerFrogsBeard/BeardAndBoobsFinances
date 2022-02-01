@@ -78,6 +78,7 @@ namespace DataAccessLibrary
 
     public class BudgetSummaryColumns : IBudgetSummaryColumns
     {
+        //This should be refactored to not spoof the data via a SQL Server temp table
         private readonly ISqlDataAccess _db;
 
 
