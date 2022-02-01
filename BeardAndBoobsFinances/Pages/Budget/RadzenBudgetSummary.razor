@@ -1,0 +1,50 @@
+﻿@*RAZDEN DATAGRID SUMMARY WITH DRILL THROUGH EXAMPLE*@
+
+@page "/Budget/Summary"
+
+@inject IBudgetDataSummary _db
+@inject IBudgetSummaryColumns _db2
+
+<h3>RadzenBudget</h3>
+
+@if (budget is null || columns is null)
+{
+    <p><em>Loadin' mah BLAZOR w/RADZEN flava britches dynamically! in a moment ...</em></p>
+}
+else
+{
+    <RadzenDataGrid 
+        Data="@budget" 
+        TItem="BudgetSummaryModel" 
+        AllowSorting="true" 
+        AllowFiltering="true" 
+        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+        FilterMode="FilterMode.Advanced"
+        SelectionMode="DataGridSelectionMode.Single" 
+        @bind-Value=@selectedBudgetItem
+        >
+        <EmptyTemplate>
+            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No records to display.</p>
+        </EmptyTemplate>
+        <Columns>
+            @foreach(var columnData in columns)
+               {
+                  <RadzenDataGridColumn TItem="BudgetSummaryModel" Property=@columnData.Name Title=@columnData.Name />
+               }
+        </Columns>
+    </RadzenDataGrid>
+}
+
+@code {
+
+    private IEnumerable<BudgetSummaryModel> budget;
+    private IList<BudgetSummaryModel> selectedBudgetItem;
+    private IEnumerable<BudgetColumnsModelAdvanced> columns;
+
+    protected override async Task OnInitializedAsync()
+    {
+        budget = await _db.GetBudgetSummary();
+
+        columns = await _db2.GetColumnsAdvanced(budget);
+    }
+}

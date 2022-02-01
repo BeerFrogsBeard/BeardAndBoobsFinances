@@ -1,0 +1,49 @@
+﻿@*BASIC IMPLEMENTATION OF RAZDENDATAGRID*@
+
+@page "/Budget/Radzen"
+
+@inject IBudgetData _db
+
+<h3>RadzenBudget</h3>
+
+@if (budget is null)
+{
+    <p><em>Loadin' mah BLAZOR w/RADZEN flava britches...</em></p>
+}
+else
+{
+    <RadzenDataGrid 
+        Data="@budget" 
+        TItem="BudgetModel" 
+        AllowSorting="true" 
+        AllowFiltering="true" 
+        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+        FilterMode="FilterMode.Advanced"
+        SelectionMode="DataGridSelectionMode.Single" 
+        @bind-Value=@selectedBudgetItem
+        >
+        <EmptyTemplate>
+            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No records to display.</p>
+        </EmptyTemplate>
+        <Columns>
+            <RadzenDataGridColumn TItem="BudgetModel" Property="Month" Title="Month" FormatString="{0:d}" />
+            <RadzenDataGridColumn TItem="BudgetModel" Property="Group" Title="Group" />
+            <RadzenDataGridColumn TItem="BudgetModel" Property="Category" Title="Category" />
+            <RadzenDataGridColumn TItem="BudgetModel" Property="Budgeted" Title="Budgeted Amount" FormatString="{0:c2}" />
+            <RadzenDataGridColumn TItem="BudgetModel" Property="Activity" Title="Activity Amount" FormatString="{0:c2}" />
+            <RadzenDataGridColumn TItem="BudgetModel" Property="Available" Title="Available Amount" FormatString="{0:c2}" Filterable="false" />
+        </Columns>
+    </RadzenDataGrid>
+}
+
+@code {
+
+    private IEnumerable<BudgetModel> budget;
+    private IList<BudgetModel> selectedBudgetItem;
+
+    protected override async Task OnInitializedAsync()
+    {
+        budget = await _db.GetBudget();
+    }
+
+}
