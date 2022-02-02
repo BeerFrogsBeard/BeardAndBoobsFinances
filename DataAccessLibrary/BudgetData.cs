@@ -56,9 +56,52 @@ namespace DataAccessLibrary
 
         public List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget)
         {
+            string PropertyName;
+            string DataType;        //used to derive Formatting
+
+            string DisplayName;     //needs to be stored  
+            string Formatting;      //derived from datatype
+            bool Visible;           //needs to be stored
+            string CssClass;        //needs to be stored
+            bool Filterable;        //needs to be stored
+
             foreach (var prop in typeof(BudgetSummaryModel).GetProperties())
             {
-                _columns.Add(new BudgetColumnsModel { Name = prop.Name, DataType = prop.PropertyType.ToString() });
+                PropertyName = prop.Name;
+                DisplayName = prop.Name; //using this for now until I build process for storing data
+                DataType = prop.PropertyType.ToString();
+                Formatting = string.Empty;
+                Visible = true;
+                CssClass = "";
+                Filterable = false;
+
+                //Formatting
+                //eventually store this data in a table
+                switch (DataType)
+                {
+                    //case "Date":
+                    //    Formatting = "{0:d}";
+                    //    break;
+                    //case "Inflow" :
+                    //case "Outflow":
+                    //case "Total":
+                    //    Formatting = "{0:c2}";
+                    //    break;
+                    default:
+                        Formatting = "";
+                        break;
+                }
+                
+                _columns.Add(new BudgetColumnsModel 
+                { 
+                    Name = PropertyName
+                    , DisplayName = DisplayName
+                    , DataType = DataType
+                    , Formatting = Formatting
+                    , Visible = Visible
+                    , CssClass = CssClass
+                    , Filterable = Filterable 
+                });
             }
 
             return _columns;

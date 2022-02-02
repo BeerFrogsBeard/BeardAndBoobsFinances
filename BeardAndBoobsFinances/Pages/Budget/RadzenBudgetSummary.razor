@@ -29,7 +29,13 @@ else
         <Columns>
             @foreach(var columnData in columns)
                {
-                  <RadzenDataGridColumn TItem="BudgetSummaryModel" Property=@columnData.Name Title=@columnData.Name />
+                  <RadzenDataGridColumn 
+                    TItem="BudgetSummaryModel" 
+                    Property=@columnData.Name 
+                    Title=@columnData.DisplayName 
+                    Visible=@columnData.Visible 
+                    Filterable=@columnData.Filterable 
+                    />
                }
         </Columns>
     </RadzenDataGrid>

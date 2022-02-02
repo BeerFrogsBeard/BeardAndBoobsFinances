@@ -1,4 +1,5 @@
-﻿namespace BeardAndBoobsFinances
+﻿
+namespace BeardAndBoobsFinances
 {
     public static class RegisterServices
     {
@@ -10,6 +11,12 @@
             builder.Services.AddTransient<IBudgetData, BudgetData>();
             builder.Services.AddTransient<IBudgetDataSummary, BudgetDataSummary>();
             builder.Services.AddTransient<IBudgetSummaryColumns, BudgetSummaryColumns>();
+
+            builder.Services.AddScoped<DialogService>();
+            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<TooltipService>();
+            builder.Services.AddScoped<ContextMenuService>();
+
             builder.Services.AddHttpClient();
         }
     }
