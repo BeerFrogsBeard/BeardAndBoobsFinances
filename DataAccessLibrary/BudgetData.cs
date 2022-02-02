@@ -44,7 +44,6 @@ namespace DataAccessLibrary
                  TABLE_NAME = N'YNAB_Budget_View'
                 ORDER BY
                  ORDINAL_POSITION";
-            //string sql = "SELECT name as Property FROM sys.columns WHERE object_id = OBJECT_ID('YNAB_Budget_View') ORDER BY column_id";
 
             return _db.LoadData<BudgetColumnsModel, dynamic>(sql, new { });
         }
@@ -78,35 +77,18 @@ namespace DataAccessLibrary
 
     public class BudgetSummaryColumns : IBudgetSummaryColumns
     {
-        //This should be refactored to not spoof the data via a SQL Server temp table
-        private readonly ISqlDataAccess _db;
+        private List<BudgetColumnsModelAdvanced> _columns = new List<BudgetColumnsModelAdvanced>();
 
-
-        public BudgetSummaryColumns(ISqlDataAccess db)
+        public List<BudgetColumnsModelAdvanced> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget)
         {
-            _db = db;
-        }
-
-        public Task<List<BudgetColumnsModelAdvanced>> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget)
-        {
-            string sql = @"
-                CREATE TABLE #DATA (
-	                [NAME] VARCHAR(50)
-	                , [DATA_TYPE] VARCHAR(50)
-                )
-            ";
 
             foreach (var prop in typeof(BudgetSummaryModel).GetProperties())
             {
-                sql += "INSERT INTO #DATA VALUES('" + prop.Name + "','" + prop.PropertyType + "')";
+                _columns.Add(new BudgetColumnsModelAdvanced { Name = prop.Name, DataType = prop.PropertyType.ToString() });
+
             }
 
-            sql += @"
-                SELECT * FROM #DATA 
-                DROP TABLE #DATA
-            ";
-
-            return _db.LoadData<BudgetColumnsModelAdvanced, dynamic>(sql, new { });
+            return _columns;
         }
     }
 }

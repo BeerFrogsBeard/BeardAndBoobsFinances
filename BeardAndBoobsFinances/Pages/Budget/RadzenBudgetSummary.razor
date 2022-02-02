@@ -38,13 +38,13 @@ else
 @code {
 
     private IEnumerable<BudgetSummaryModel> budget;
-    private IEnumerable<BudgetColumnsModelAdvanced> columns;
+    private IList<BudgetColumnsModelAdvanced> columns;
     private IList<BudgetSummaryModel> selectedBudgetItem;
     
     protected override async Task OnInitializedAsync()
     {
         budget = await _db.GetBudgetSummary();
 
-        columns = await _db2.GetColumnsAdvanced(budget);
+        columns = _db2.GetColumnsAdvanced(budget);
     }
 }
