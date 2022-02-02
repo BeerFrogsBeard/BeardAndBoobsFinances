@@ -24,31 +24,6 @@ namespace DataAccessLibrary
 
     }
 
-    public class BudgetDataColumns : IBudgetDataColumns
-    {
-        private readonly ISqlDataAccess _db;
-
-        public BudgetDataColumns(ISqlDataAccess db)
-        {
-            _db = db;
-        }
-
-        public Task<List<BudgetColumnsModel>> GetColumns()
-        {
-            string sql = @"
-                SELECT 
-                 COLUMN_NAME AS PROPERTY
-                FROM 
-                 INFORMATION_SCHEMA.COLUMNS 
-                WHERE 
-                 TABLE_NAME = N'YNAB_Budget_View'
-                ORDER BY
-                 ORDINAL_POSITION";
-
-            return _db.LoadData<BudgetColumnsModel, dynamic>(sql, new { });
-        }
-    }
-
     public class BudgetDataSummary : IBudgetDataSummary
     {
         private readonly ISqlDataAccess _db;
@@ -77,15 +52,13 @@ namespace DataAccessLibrary
 
     public class BudgetSummaryColumns : IBudgetSummaryColumns
     {
-        private List<BudgetColumnsModelAdvanced> _columns = new List<BudgetColumnsModelAdvanced>();
+        private List<BudgetColumnsModel> _columns = new List<BudgetColumnsModel>();
 
-        public List<BudgetColumnsModelAdvanced> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget)
+        public List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget)
         {
-
             foreach (var prop in typeof(BudgetSummaryModel).GetProperties())
             {
-                _columns.Add(new BudgetColumnsModelAdvanced { Name = prop.Name, DataType = prop.PropertyType.ToString() });
-
+                _columns.Add(new BudgetColumnsModel { Name = prop.Name, DataType = prop.PropertyType.ToString() });
             }
 
             return _columns;

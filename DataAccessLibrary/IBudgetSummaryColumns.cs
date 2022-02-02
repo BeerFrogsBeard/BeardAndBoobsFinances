@@ -3,6 +3,6 @@ namespace DataAccessLibrary
 {
     public interface IBudgetSummaryColumns
     {
-        List<BudgetColumnsModelAdvanced> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget);
+        List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget);
     }
 }

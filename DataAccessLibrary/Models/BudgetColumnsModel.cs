@@ -8,11 +8,6 @@ namespace DataAccessLibrary.Models;
 
     public class BudgetColumnsModel
     {
-        public string Property { get; set; }
-    }
-
-    public class BudgetColumnsModelAdvanced
-    {
         public string Name { get; set; }
         public string DataType { get; set; }
     }
