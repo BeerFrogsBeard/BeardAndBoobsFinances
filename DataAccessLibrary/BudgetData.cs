@@ -58,12 +58,14 @@ namespace DataAccessLibrary
         {
             string PropertyName;
             string DataType;        //used to derive Formatting
+            string Formatting;      //derived from datatype
 
             string DisplayName;     //needs to be stored  
-            string Formatting;      //derived from datatype
             bool Visible;           //needs to be stored
             string CssClass;        //needs to be stored
             bool Filterable;        //needs to be stored
+
+            //Need to pull BB_XREF Data XREF_TYPE = BUDGET_SUMMARY
 
             foreach (var prop in typeof(BudgetSummaryModel).GetProperties())
             {
@@ -79,32 +81,60 @@ namespace DataAccessLibrary
                 //eventually store this data in a table
                 switch (DataType)
                 {
-                    //case "Date":
-                    //    Formatting = "{0:d}";
-                    //    break;
-                    //case "Inflow" :
-                    //case "Outflow":
-                    //case "Total":
-                    //    Formatting = "{0:c2}";
-                    //    break;
+                    case "System.DateTime":
+                        Formatting = "{0:d}";
+                        break;
+                    case "System.Double" :
+                        Formatting = "{0:c2}";
+                        break;
                     default:
                         Formatting = "";
                         break;
                 }
                 
                 _columns.Add(new BudgetColumnsModel 
-                { 
-                    Name = PropertyName
-                    , DisplayName = DisplayName
-                    , DataType = DataType
-                    , Formatting = Formatting
-                    , Visible = Visible
-                    , CssClass = CssClass
-                    , Filterable = Filterable 
-                });
+                    { 
+                        Name = PropertyName
+                        , DisplayName = DisplayName
+                        , DataType = DataType
+                        , Formatting = Formatting
+                        , Visible = Visible
+                        , CssClass = CssClass
+                        , Filterable = Filterable 
+                    }
+                );
             }
 
             return _columns;
+        }
+
+    }
+    public class BudgetColumnFormatting
+    {
+        private readonly ISqlDataAccess _db;
+
+        public BudgetColumnFormatting(ISqlDataAccess db)
+        {
+            _db = db;
+        }
+
+        public Task<List<BudgetColumnsModel_Import>> GetBudgetColumns()
+        {
+            string sql = @"
+                SELECT 
+	                XREF_TYPE
+                    , PropertyName
+                    , DisplayName
+                    , Formatting
+                    , Visible
+                    , CssClass
+                    , Filterable
+                FROM 
+	                DBO.BB_XREF
+                WHERE
+	                XREF_TYPE = 'BUDGET_SUMMARY'";
+
+            return _db.LoadData<BudgetColumnsModel_Import, dynamic>(sql, new { });
         }
     }
 }

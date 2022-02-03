@@ -16,3 +16,14 @@ namespace DataAccessLibrary.Models;
         public string CssClass { get; set; }
         public bool Filterable { get; set; }
     }
+
+public class BudgetColumnsModel_Import
+{
+    public string XREF_TYPE { get; set; }
+    public string PropertyName { get; set; }
+    public string DisplayName { get; set; }
+    public string Formatting { get; set; }
+    public string Visible { get; set; }
+    public string CssClass { get; set; }
+    public string Filterable { get; set; }
+}
