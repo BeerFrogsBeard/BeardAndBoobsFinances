@@ -6,6 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.ConfigureServices();
 
+//code for serilog
+Log.Logger = new LoggerConfiguration()
+.Enrich.FromLogContext()
+.WriteTo.File(@"C:\logs\log.txt")
+.CreateLogger();
+
+builder.Host.UseSerilog();
+//end code for serilog
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

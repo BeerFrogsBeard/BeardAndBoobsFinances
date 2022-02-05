@@ -54,29 +54,38 @@ namespace DataAccessLibrary
     {
         private List<BudgetColumnsModel> _columns = new List<BudgetColumnsModel>();
 
-        public List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget, IEnumerable<ColumnXREF_Import> formatting)
+        public List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<ColumnXREF_Import> formatting) 
         {
-            string PropertyName;
-            string DataType;        //used to derive Formatting
-            string Formatting;      //derived from datatype
-
-            string DisplayName;     //needs to be stored  
-            bool Visible;           //needs to be stored
-            string CssClass;        //needs to be stored
-            bool Filterable;        //needs to be stored
-
-            //Need to pull BB_XREF Data XREF_TYPE = BUDGET_SUMMARY
-            //Task<List<ColumnXREF_Import>> formatting = new ColumnXREF();
+            //default values
+            string PropertyName = "";
+            string DisplayName = "";
+            string DataType = "";
+            string Formatting = "";
+            
+            bool Visible = true;
+            string CssClass = "";
+            bool Filterable = true;
 
             foreach (var prop in typeof(BudgetSummaryModel).GetProperties())
             {
                 PropertyName = prop.Name;
-                DisplayName = prop.Name; //using this for now until I build process for storing data
+                //DisplayName = prop.Name;
                 DataType = prop.PropertyType.ToString();
                 Formatting = string.Empty;
-                Visible = true;
-                CssClass = "";
-                Filterable = false;
+
+                IEnumerable<ColumnXREF_Import> _formatting = formatting.Where(t => t.PropertyName == PropertyName.ToUpper());
+                foreach (var item in _formatting)
+                {
+                    DisplayName = item.DisplayName;
+                }
+                //if (_formatting != null)
+                //{
+                //    foreach (var item in _formatting.s)
+                //    {
+                //        DisplayName = item.DisplayName;
+                //    }
+                //}
+
 
                 //Formatting defaults to be used if data not found in BB_XREF
                 switch (DataType)
@@ -84,25 +93,25 @@ namespace DataAccessLibrary
                     case "System.DateTime":
                         Formatting = "{0:d}";
                         break;
-                    case "System.Double" :
+                    case "System.Double":
                         Formatting = "{0:c2}";
                         break;
                     default:
                         Formatting = "";
                         break;
                 }
-                
-                _columns.Add(new BudgetColumnsModel 
-                    { 
-                        Name = PropertyName
-                        , DisplayName = DisplayName
-                        , DataType = DataType
-                        , Formatting = Formatting
-                        , Visible = Visible
-                        , CssClass = CssClass
-                        , Filterable = Filterable 
-                    }
-                );
+
+                _columns.Add(new BudgetColumnsModel
+                {
+                    Name = PropertyName
+                    , DisplayName = DisplayName
+                    //, DataType = DataType
+                    , Formatting = Formatting
+                    , Visible = Visible
+                    , CssClass = CssClass
+                    , Filterable = Filterable
+                });
+
             }
 
             return _columns;

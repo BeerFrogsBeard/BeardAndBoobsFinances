@@ -23,7 +23,7 @@ namespace DataAccessLibrary.Models;
         public string PropertyName { get; set; }
         public string DisplayName { get; set; }
         public string Formatting { get; set; }
-        public string Visible { get; set; }
+        public bool Visible { get; set; }
         public string CssClass { get; set; }
-        public string Filterable { get; set; }
+        public bool Filterable { get; set; }
     }

@@ -3,6 +3,6 @@ namespace DataAccessLibrary
 {
     public interface IBudgetSummaryColumns
     {
-        List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget, IEnumerable<ColumnXREF_Import> formatting);
+        List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<ColumnXREF_Import> formatting);
     }
 }
