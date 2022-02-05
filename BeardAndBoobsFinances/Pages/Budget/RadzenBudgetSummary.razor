@@ -4,6 +4,7 @@
 
 @inject IBudgetDataSummary _db
 @inject IBudgetSummaryColumns _db2
+@inject IColumnXREF _db3
 
 <h3>RadzenBudget</h3>
 
@@ -35,7 +36,7 @@ else
                     Title=@columnData.DisplayName 
                     Visible=@columnData.Visible 
                     Filterable=@columnData.Filterable 
-                    FormatString=@columnData.Formatting
+                    FormatString=@columnData.Formatting 
                     />
                }
         </Columns>
@@ -47,11 +48,13 @@ else
     private IEnumerable<BudgetSummaryModel> budget;
     private IList<BudgetColumnsModel> columns;
     private IList<BudgetSummaryModel> selectedBudgetItem;
-    
+    private IEnumerable<ColumnXREF_Import> formatting;
+
     protected override async Task OnInitializedAsync()
     {
         budget = await _db.GetBudgetSummary();
+        formatting = await _db3.GetColumnXREF();
 
-        columns = _db2.GetColumnsAdvanced(budget);
+        columns = _db2.GetColumnsAdvanced(budget, formatting);
     }
 }

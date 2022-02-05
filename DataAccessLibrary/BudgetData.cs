@@ -54,7 +54,7 @@ namespace DataAccessLibrary
     {
         private List<BudgetColumnsModel> _columns = new List<BudgetColumnsModel>();
 
-        public List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget)
+        public List<BudgetColumnsModel> GetColumnsAdvanced(IEnumerable<BudgetSummaryModel> budget, IEnumerable<ColumnXREF_Import> formatting)
         {
             string PropertyName;
             string DataType;        //used to derive Formatting
@@ -66,6 +66,7 @@ namespace DataAccessLibrary
             bool Filterable;        //needs to be stored
 
             //Need to pull BB_XREF Data XREF_TYPE = BUDGET_SUMMARY
+            //Task<List<ColumnXREF_Import>> formatting = new ColumnXREF();
 
             foreach (var prop in typeof(BudgetSummaryModel).GetProperties())
             {
@@ -77,8 +78,7 @@ namespace DataAccessLibrary
                 CssClass = "";
                 Filterable = false;
 
-                //Formatting
-                //eventually store this data in a table
+                //Formatting defaults to be used if data not found in BB_XREF
                 switch (DataType)
                 {
                     case "System.DateTime":
@@ -109,32 +109,33 @@ namespace DataAccessLibrary
         }
 
     }
-    public class BudgetColumnFormatting
+
+    public class ColumnXREF : IColumnXREF
     {
         private readonly ISqlDataAccess _db;
 
-        public BudgetColumnFormatting(ISqlDataAccess db)
+        public ColumnXREF(ISqlDataAccess db)
         {
             _db = db;
         }
 
-        public Task<List<BudgetColumnsModel_Import>> GetBudgetColumns()
+        public Task<List<ColumnXREF_Import>> GetColumnXREF()
         {
             string sql = @"
-                SELECT 
-	                XREF_TYPE
-                    , PropertyName
-                    , DisplayName
-                    , Formatting
-                    , Visible
-                    , CssClass
-                    , Filterable
-                FROM 
-	                DBO.BB_XREF
-                WHERE
-	                XREF_TYPE = 'BUDGET_SUMMARY'";
+                    SELECT
+                        XREF_TYPE
+                        , PropertyName
+                        , DisplayName
+                        , Formatting
+                        , Visible
+                        , CssClass
+                        , Filterable
+                    FROM 
+                        DBO.BB_XREF
+                    WHERE
+                        XREF_TYPE = 'BUDGET_SUMMARY'";
 
-            return _db.LoadData<BudgetColumnsModel_Import, dynamic>(sql, new { });
+            return _db.LoadData<ColumnXREF_Import, dynamic>(sql, new { });
         }
     }
 }
