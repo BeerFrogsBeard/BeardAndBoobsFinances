@@ -58,9 +58,9 @@ namespace DataAccessLibrary
         {
             //default values
             string PropertyName = "";
-            string DisplayName = "";
+            string DisplayName = null;
             string DataType = "";
-            string Formatting = "";
+            string Formatting = null;
             
             bool Visible = true;
             string CssClass = "";
@@ -68,37 +68,39 @@ namespace DataAccessLibrary
 
             foreach (var prop in typeof(BudgetSummaryModel).GetProperties())
             {
-                PropertyName = prop.Name;
-                //DisplayName = prop.Name;
+                PropertyName = prop.Name;                
                 DataType = prop.PropertyType.ToString();
-                Formatting = string.Empty;
 
-                IEnumerable<ColumnXREF_Import> _formatting = formatting.Where(t => t.PropertyName == PropertyName.ToUpper());
-                foreach (var item in _formatting)
+                var count = formatting.Count();
+
+                if (count > 0)
                 {
-                    DisplayName = item.DisplayName;
+                    IEnumerable<ColumnXREF_Import> _formatting = formatting.Where(t => t.PropertyName == PropertyName.ToUpper());
+                    foreach (var item in _formatting)
+                    {
+                        DisplayName = item.DisplayName;
+                        Formatting = item.Formatting;
+                        Visible = item.Visible;
+                        CssClass = item.CssClass;
+                        Filterable = item.Filterable;
+                    }
                 }
-                //if (_formatting != null)
-                //{
-                //    foreach (var item in _formatting.s)
-                //    {
-                //        DisplayName = item.DisplayName;
-                //    }
-                //}
-
-
-                //Formatting defaults to be used if data not found in BB_XREF
-                switch (DataType)
+                else 
                 {
-                    case "System.DateTime":
-                        Formatting = "{0:d}";
-                        break;
-                    case "System.Double":
-                        Formatting = "{0:c2}";
-                        break;
-                    default:
-                        Formatting = "";
-                        break;
+                    DisplayName = prop.Name;
+
+                    switch (DataType)
+                    {
+                        case "System.DateTime":
+                            Formatting = "{0:d}";
+                            break;
+                        case "System.Double":
+                            Formatting = "{0:c2}";
+                            break;
+                        default:
+                            Formatting = "";
+                            break;
+                    }
                 }
 
                 _columns.Add(new BudgetColumnsModel

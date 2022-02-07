@@ -29,6 +29,8 @@ namespace DataAccessLibrary
             {
                 var data = await connection.QueryAsync<T>(sql, parameters);
 
+                //Log.Information("Number of records returned: " + data.Count().ToString());
+
                 return data.ToList();
             }
         }

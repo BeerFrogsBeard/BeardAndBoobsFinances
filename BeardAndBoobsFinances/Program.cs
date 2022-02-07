@@ -6,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.ConfigureServices();
 
-//code for serilog
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
@@ -16,7 +15,6 @@ Log.Logger = new LoggerConfiguration()
 .CreateLogger();
 
 builder.Host.UseSerilog();
-//end code for serilog
 
 try
 {

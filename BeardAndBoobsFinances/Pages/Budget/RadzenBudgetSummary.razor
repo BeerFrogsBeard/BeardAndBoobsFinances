@@ -54,7 +54,7 @@ else
     {
         budget = await _db.GetBudgetSummary();
         formatting = await _db3.GetColumnXREF();
-
-        columns = _db2.GetColumnsAdvanced(formatting);
+        columns = _db2.GetColumnsAdvanced(formatting);        
+        //columns = _db2.GetColumnsAdvanced();
     }
 }
