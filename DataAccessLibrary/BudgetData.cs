@@ -107,7 +107,6 @@ namespace DataAccessLibrary
                 {
                     Name = PropertyName
                     , DisplayName = DisplayName
-                    //, DataType = DataType
                     , Formatting = Formatting
                     , Visible = Visible
                     , CssClass = CssClass
