@@ -1,17 +1,19 @@
 ﻿@*RAZDEN DATAGRID SUMMARY WITH DRILL THROUGH EXAMPLE*@
 
 @page "/Budget/Summary"
+@using System.Text
 
 @inject IBudgetDataSummary _db
 @inject IBudgetSummaryColumns _db2
 @inject IColumnXREF _db3
 @inject ContextMenuService ContextMenuService
+@inject IJSRuntime JS
 
 <h3>RadzenBudget</h3>
 
 @if (budget is null || columns is null)
 {
-    <p><em>Loadin' mah BLAZOR w/RADZEN flava britches dynamically! in a moment ...</em></p>
+    <p><em>Loadin' ...</em></p>
 }
 else
 {
@@ -20,6 +22,7 @@ else
         TItem="BudgetSummaryModel" 
         AllowSorting="true" 
         AllowFiltering="true" 
+        Style="height:1000px"
         FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
         FilterMode="FilterMode.Advanced"
         SelectionMode="DataGridSelectionMode.Multiple" 
@@ -69,16 +72,45 @@ else
     {
         ContextMenuService.Open(args,
             new List<ContextMenuItem> {
-                new ContextMenuItem(){ Text = "Export to PDF", Value = 1 },
-                new ContextMenuItem(){ Text = "Export to Excel", Value = 2 },
+                new ContextMenuItem(){ Text = "Export to Excel", Value = 1 },
          }, OnMenuItemClick);
     }
 
     void ShowContextMenuWithContent(MouseEventArgs args) => ContextMenuService.Open(args, ds =>
-        @<RadzenMenu Click="OnMenuItemClick"/>);
+    @<RadzenMenu Click="OnMenuItemClick"/>
+    );
 
     void OnMenuItemClick(MenuItemEventArgs args)
     {
-        Log.Information($"Menu item with Value={args.Value} clicked");
+        switch (args.Value.ToString())
+        {
+            case "1":
+                Log.Information($"Menu item with Value={args.Value} clicked");
+                DownloadFileFromStream();
+                ContextMenuService.Close();
+                break;
+            default:
+                ContextMenuService.Close();
+                break;
+        }
+    }
+
+    private Stream GetFileStream()
+    {
+        var randomBinaryData = new byte[50 * 1024];
+        //replace byte[50 * 1024] with output from RadzenDataGrid?
+        var fileStream = new MemoryStream(randomBinaryData);
+
+        return fileStream;
+    }
+
+    private async Task DownloadFileFromStream()
+    {
+        var fileStream = GetFileStream();
+        var fileName = "log.bin";
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }
