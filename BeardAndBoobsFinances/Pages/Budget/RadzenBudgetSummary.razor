@@ -2,6 +2,7 @@
 
 @page "/Budget/Summary"
 @using System.Text
+@using ClosedXML.Excel
 
 @inject IBudgetDataSummary _db
 @inject IBudgetSummaryColumns _db2
@@ -95,22 +96,29 @@ else
         }
     }
 
-    private Stream GetFileStream()
+    private byte[] GetFileStream()
     {
-        var randomBinaryData = new byte[50 * 1024];
-        //replace byte[50 * 1024] with output from RadzenDataGrid?
-        var fileStream = new MemoryStream(randomBinaryData);
+        var wb = new XLWorkbook();
+        var ws = wb.Worksheets.Add("Data");
 
-        return fileStream;
+        for (var i = 1; i <= budget.Count(); i++)
+        {
+            ws.Cell(i, 1).Value = budget.ElementAt(i - 1).Date.ToShortDateString();
+            ws.Cell(i, 2).Value = budget.ElementAt(i - 1).Inflow.ToString();
+            ws.Cell(i, 3).Value = budget.ElementAt(i - 1).Outflow.ToString();
+            ws.Cell(i, 4).Value = budget.ElementAt(i - 1).Total.ToString();
+        }
+
+        var stream = new MemoryStream();
+        wb.SaveAs(stream);
+        return stream.ToArray();
     }
 
     private async Task DownloadFileFromStream()
     {
         var fileStream = GetFileStream();
-        var fileName = "log.bin";
+        var fileName = "test.xslx";
 
-        using var streamRef = new DotNetStreamReference(stream: fileStream);
-
-        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, Convert.ToBase64String(fileStream));
     }
 }

@@ -1,17 +1,8 @@
-﻿async function downloadFileFromStream(fileName, contentStreamReference) {
-    const arrayBuffer = await contentStreamReference.arrayBuffer();
-    const blob = new Blob([arrayBuffer]);
-    const url = URL.createObjectURL(blob);
-
-    triggerFileDownload(fileName, url);
-
-    URL.revokeObjectURL(url);
-}
-
-function triggerFileDownload(fileName, url) {
-    const anchorElement = document.createElement('a');
-    anchorElement.href = url;
-    anchorElement.download = fileName ?? '';
-    anchorElement.click();
-    anchorElement.remove();
+﻿function downloadFileFromStream(fileName, byteBase64) {
+    var link = document.createElement('a');
+    link.download = fileName;
+    link.href = 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' + byteBase64;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
