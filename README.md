@@ -18,4 +18,3 @@ These are the things I want to accomplish:
 * Create a dashboard/overview of finances
 * Create the ability to drill into a section of the dashboard for more detail
 * Leverage existing YNAB libraries that can facilitate easier data access
-* Custom right click menu for export to excel/create pdf
