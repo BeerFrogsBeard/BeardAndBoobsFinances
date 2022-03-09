@@ -1,0 +1,67 @@
+﻿@page "/transactions"
+@using System.Net.Http.Headers
+@inject IConfiguration _config
+@inject IHttpClientFactory _clientFactory
+
+<h3>Transactions</h3>
+
+@if (string.IsNullOrWhiteSpace(errorString) == false)
+{
+
+}
+else if (transactions is null)
+{
+    <p><em>Loadin' ... Are you sure you want to see?</em></p>
+}
+else
+{
+    <RadzenDataGrid
+        Data="@transactions"
+        TItem="Transaction"
+        AllowSorting="true"
+        AllowFiltering="true"
+        Style="height:1000px"
+        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+        FilterMode="FilterMode.Advanced"
+        SelectionMode="DataGridSelectionMode.Multiple" 
+        >
+        <EmptyTemplate>
+            <p style="color: lightgrey; font-size: 24px; text-align: center; margin: 2rem;">No records to display.</p>
+        </EmptyTemplate>
+    </RadzenDataGrid>
+}
+
+@code {
+    private IEnumerable<Transaction> transactions;
+    string errorString;
+    string token = "";
+    string budgetID = "";
+    string startDate = "2022-03-05";
+    string data = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        token = _config.GetValue<string>("YNAB_INFO:API_TOKEN");
+        budgetID = _config.GetValue<string>("YNAB_INFO:Budget_ID");
+
+        var request = new HttpRequestMessage(HttpMethod.Get,
+            $"https://api.youneedabudget.com/v1/budgets/{budgetID}/transactions?since_date={startDate}");
+
+        var client = _clientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        HttpResponseMessage response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            //transactions = await response.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
+            data = await response.Content.ReadAsStringAsync();
+            Log.Information("##START##" + data + "##END##");
+            errorString = null;
+        }
+        else
+        {
+            errorString = $"There was an error getting your transactions. You're ASS IS BROKE!";
+        }
+    }
+}

@@ -12,6 +12,7 @@ namespace BeardAndBoobsFinances
             builder.Services.AddTransient<IBudgetDataSummary, BudgetDataSummary>();
             builder.Services.AddTransient<IBudgetSummaryColumns, BudgetSummaryColumns>();
             builder.Services.AddTransient<IColumnXREF, ColumnXREF>();
+            builder.Services.AddTransient<ITransaction, Transaction>();
 
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();

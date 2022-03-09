@@ -9,6 +9,7 @@
 @inject IColumnXREF _db3
 @inject ContextMenuService ContextMenuService
 @inject IJSRuntime JS
+@*@inject ITransactions _tran*@
 
 <h3>RadzenBudget</h3>
 
@@ -62,6 +63,8 @@ else
         budget = await _db.GetBudgetSummary();
         formatting = await _db3.GetColumnXREF();
         columns = _db2.GetColumnsAdvanced(formatting);
+
+        //await _tran.GetTransactions();
     }
 
     void DoubleClick(DataGridRowMouseEventArgs<BudgetSummaryModel> args)

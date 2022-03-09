@@ -1,6 +1,7 @@
 using BeardAndBoobsFinances;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+//using Microsoft.Extensions.Configuration.UserSecrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,9 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+//YNAB_Configuration.Token = configuration.GetValue<string>("YNAB_INFO:API_TOKEN");
+//YNAB_Configuration.BudgetId = configuration.GetValue<string>("YNAB_INFO:Budget_ID");
+
 try
 {
     Log.Information("Application Starting Up");
@@ -27,6 +31,7 @@ try
         app.UseExceptionHandler("/Error");
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
+        //app.AddUserSecrets();
     }
 
     app.UseHttpsRedirection();
