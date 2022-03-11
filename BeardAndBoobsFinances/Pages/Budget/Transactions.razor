@@ -1,5 +1,6 @@
 ﻿@page "/transactions"
 @using System.Net.Http.Headers
+@*@using Flurl.Http*@
 @inject IConfiguration _config
 @inject IHttpClientFactory _clientFactory
 
@@ -37,12 +38,19 @@ else
     string token = "";
     string budgetID = "";
     string startDate = "2022-03-05";
-    string data = "";
 
     protected override async Task OnInitializedAsync()
     {
         token = _config.GetValue<string>("YNAB_INFO:API_TOKEN");
         budgetID = _config.GetValue<string>("YNAB_INFO:Budget_ID");
+
+        //using Furl.Http exibits the same behaviour as the solution below
+        //tried with and without string interpolation
+        //var test = await $"https://api.youneedabudget.com/v1/budgets/{budgetID}/transactions?since_date={startDate}"
+        //    .WithOAuthBearerToken(token)
+        //    .GetStringAsync();
+
+        //Log.Information("##START##" + test + "##END##");
 
         var request = new HttpRequestMessage(HttpMethod.Get,
             $"https://api.youneedabudget.com/v1/budgets/{budgetID}/transactions?since_date={startDate}");
@@ -55,8 +63,9 @@ else
         if (response.IsSuccessStatusCode)
         {
             //transactions = await response.Content.ReadFromJsonAsync<IEnumerable<Transaction>>();
-            data = await response.Content.ReadAsStringAsync();
+            var data = await response.Content.ReadAsStringAsync();
             Log.Information("##START##" + data + "##END##");
+
             errorString = null;
         }
         else
